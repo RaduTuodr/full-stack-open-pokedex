@@ -17,5 +17,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Now it is
-	run: |
-	  echo date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+        run: |
+          date
+
+      - name: Directory contents
+        run: |
+          ls -l
