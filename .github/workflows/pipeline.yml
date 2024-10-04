@@ -20,7 +20,5 @@ jobs:
         run: npm run eslint
       - name: Build
         run: npm run build --verbose
-      - name: Running
-        run: npm run start
       - name: e2e tests
         run: npm run test:e2e
