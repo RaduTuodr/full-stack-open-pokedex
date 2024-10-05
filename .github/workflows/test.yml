@@ -9,7 +9,8 @@ jobs:
   a_test_job:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Useless name 
+        uses: actions/checkout@v4
 
       - name: Check if skip tag-bump
         if: ${{ !contains(toJson(github.event.commits.*.message), '#skip') }}
