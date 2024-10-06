@@ -41,6 +41,8 @@ jobs:
     needs: [tag_release]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: New release notification
         uses: rjstone/discord-webhook-notify@v1
         if: success()
