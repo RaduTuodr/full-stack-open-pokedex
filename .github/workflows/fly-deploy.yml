@@ -30,8 +30,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@v1
+        uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
         if: ${{ github.event_name == 'push' }}
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
+  tag_notify:
+    name: Notify change
+    needs: [tag_release]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+    - name: New release notification
+      if: success()      
+      run: |
+        curl -H "Content-Type: application/json" -d '{"content": "**INFO:** New tag released!"}' ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Build failed notification
+      if: failure()
+      run: |
+        curl -H "Content-Type: application/json" -d '{"content": "**ERROR:** Build failed! Please check the logs."}' ${{ secrets.DISCORD_WEBHOOK }}
