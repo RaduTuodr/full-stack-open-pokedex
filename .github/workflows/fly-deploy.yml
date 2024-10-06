@@ -41,19 +41,27 @@ jobs:
     needs: [tag_release]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
       - name: New release notification
-        uses: rjstone/discord-webhook-notify@v1
+        run: |
+          curl -H "Content-Type: application/json" -d '{"content": "New tag released!"}' ${{ secrets.DISCORD_WEBHOOK }}
         if: success()
-        with: 
-          severity: info
-          details: New tag released!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failed notification
+        run: |
+          curl -H "Content-Type: application/json" -d '{"content": "Build failed! Please check the logs."}' ${{ secrets.DISCORD_WEBHOOK }}
         if: failure()
-        uses: rjstone/discord-webhook-notify@v1
-        with:
-          severity: error
-          details: Build failed! Please check the logs.
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      # - uses: actions/checkout@v4
+      # - uses: actions/setup-node@v4
+      # - name: New release notification
+      #   uses: rjstone/discord-webhook-notify@v1
+      #   if: success()
+      #   with: 
+      #     severity: info
+      #     details: New tag released!
+      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      # - name: Build failed notification
+      #   if: failure()
+      #   uses: rjstone/discord-webhook-notify@v1
+      #   with:
+      #     severity: error
+      #     details: Build failed! Please check the logs.
+      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
