@@ -30,8 +30,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@v1
+        uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
         if: ${{ github.event_name == 'push' }}
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
+  tag_notify:
+    name: Notify change
+    needs: [tag_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: New release notification
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with: 
+          severity: info
+          details: New tag released!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build failed notification
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: Build failed! Please check the logs.
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
