@@ -46,7 +46,7 @@ jobs:
     - name: New release notification
       if: success()      
       run: |
-        curl -H "Content-Type: application/json" -d '{"content": "**INFO:** New tag released!"}' ${{ secrets.DISCORD_WEBHOOK }}
+        curl -H "Content-Type: application/json" -d '{"content": "Hello! New tag has been released!"}' ${{ secrets.DISCORD_WEBHOOK }}
     - name: Build failed notification
       if: failure()
       run: |
